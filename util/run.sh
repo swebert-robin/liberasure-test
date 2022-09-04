@@ -42,24 +42,24 @@ function test() {
 }
 
 blocksizes=(
+    4Ki
     16Ki
+    32Ki
     64Ki
     128Ki
     256Ki
-    512Ki
     1Mi
+    2Mi
     4Mi
-    8Mi
     16Mi
+    32Mi
     64Mi
     128Mi
     256Mi
     512Mi
     1Gi
+    1.25Gi
     2Gi
-    4Gi
-    5Gi
-    8Gi
 )
 
 backends="jv jc iv ic"
