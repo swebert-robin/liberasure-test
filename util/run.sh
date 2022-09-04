@@ -1,4 +1,4 @@
-basedir=/home/robin/object-store/erasure/test/liberasure
+basedir=$PWD
 prog=$basedir/bin/main
 
 function test() {

@@ -1,4 +1,4 @@
-basedir=/home/robin/object-store/erasure/test/liberasure/results
+basedir=$PWD
 stats_file=$basedir/top_stats.txt
 stats_interval=5
 

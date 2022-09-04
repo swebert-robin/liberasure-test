@@ -1,4 +1,4 @@
-basedir=/home/robin/object-store/erasure/test/liberasure/results
+basedir=$PWD
 
 function rotate() {
     local backend=$1
