@@ -11,7 +11,7 @@ Update the `K+M` values inside `util/run.sh`.
 wget https://gist.githubusercontent.com/swebert-robin/2138c8f363f2c4303ba5dfa22d110b01/raw/5f581dfaa939ac34c753dd2dbf28468c7271ea16/scl.sh
 sh scl.sh
 
-wget https://gist.githubusercontent.com/swebert-robin/2138c8f363f2c4303ba5dfa22d110b01/raw/5f581dfaa939ac34c753dd2dbf28468c7271ea16/install.sh
+wget https://gist.githubusercontent.com/swebert-robin/2138c8f363f2c4303ba5dfa22d110b01/raw/fb26aef56303329c6a36c117f784d43674820655/install.sh
 sh install.sh
 ```
 
