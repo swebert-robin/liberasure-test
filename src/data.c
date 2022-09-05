@@ -1,4 +1,4 @@
-#include "main.h"
+#include "data.h"
 
 char *create_buffer(size_t size, int fill)
 {
@@ -10,22 +10,32 @@ char *create_buffer(size_t size, int fill)
     return buf;
 }
 
-int *create_skips_array(struct ec_args *args, int skip)
+int *create_skips_array(struct ec_args *args, int num_blocks_to_skip)
 {
-    int num = args->k + args->m;
-    size_t array_size = sizeof(int) * num;
+    int k_plus_m = args->k + args->m;
+    size_t array_size = sizeof(int) * k_plus_m;
+
     int *buf = malloc(array_size);
     if (buf == NULL) {
         return NULL;
     }
+
     memset(buf, 0, array_size);
-    if (skip >= 0 && skip < num) {
-        buf[skip] = 1;
+
+    int skip_idx = 0;
+    int fd = open("/dev/random", O_RDONLY);
+    read(fd, &skip_idx, num_blocks_to_skip);
+    close(fd);
+
+    for (int i = 0; i < num_blocks_to_skip; i++) {
+        buf[(skip_idx & 0xF) % k_plus_m] = 1;
+        skip_idx >>= 0xF
     }
+
     return buf;
 }
 
-static int create_frags_array(
+int create_frags_array(
     char ***array,
     char **data,
     char **parity,

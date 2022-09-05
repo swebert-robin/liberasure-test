@@ -21,11 +21,14 @@
 #include "erasurecode_backend.h"
 #include "alg_sig.h"
 
-typedef void (*TEST_FUNC)();
+char *create_buffer(size_t size, int fill);
 
-static void encode_decode_test_impl(
-    const ec_backend_id_t be_id,
+int *create_skips_array(struct ec_args *args, int skip);
+
+int create_frags_array(
+    char ***array,
+    char **data,
+    char **parity,
     struct ec_args *args,
-    int *skip,
-    size_t orig_data_size
+    int *skips
 );

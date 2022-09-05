@@ -21,11 +21,22 @@
 #include "erasurecode_backend.h"
 #include "alg_sig.h"
 
-typedef void (*TEST_FUNC)();
+enum { NS_PER_SECOND = 1000000000 };
 
-static void encode_decode_test_impl(
-    const ec_backend_id_t be_id,
-    struct ec_args *args,
-    int *skip,
-    size_t orig_data_size
+struct time_stats {
+    struct timespec create;
+    struct timespec encode;
+    struct timespec decode;
+    struct timespec fragment;
+    struct timespec total;
+} time_stats;
+
+struct timespec *calculate_time_delta(
+    struct timespec tick,
+    struct timespec tock,
+    struct timespec *delta
 );
+
+double total_time_taken();
+
+void print_time_taken(int iter);
