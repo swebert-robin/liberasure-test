@@ -13,6 +13,7 @@ LD_LIBRARY_PATH := LD_LIBRARY_PATH=/usr/lib:/usr/local/lib
 all:
 	gcc $(INCLUDE:%=-I %) $(CPP_FLAGS) -o $(BUILD)/data.o -c $(SRC)/data.c
 	gcc $(INCLUDE:%=-I %) $(CPP_FLAGS) -o $(BUILD)/timing.o -c $(SRC)/timing.c
+	gcc $(INCLUDE:%=-I %) $(CPP_FLAGS) -o $(BUILD)/argparser.o -c $(SRC)/argparser.c
 	gcc $(INCLUDE:%=-I %) $(CPP_FLAGS) -o $(BIN)/$(TARGET) $(BUILD)/* $(SRC)/main.c
 
 clean:

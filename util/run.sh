@@ -15,29 +15,17 @@ function test() {
     # outfile=/dev/null
     touch $outfile
 
-    # local Ki="[0-9]*Ki"
-    # local Mi="[0-9]*Mi"
-    # local Gi="[0-9]*Gi"
-
-    # if [[ $blocksize =~ $Ki ]]
-    # then
-    #     local min_iterations=1000
-    #     local max_runtime=60
-    # elif  [[ $blocksize =~ $Mi ]]
-    # then
-    #     local min_iterations=1000
-    #     local max_runtime=40
-    # elif  [[ $blocksize =~ $Gi ]]
-    # then
-    #     local min_iterations=1000
-    #     local max_runtime=20
-    # else
-    #     local min_iterations=0
-    #     local max_runtime=0
-    # fi
-
     echo "blocksize: $blocksize"
-    $prog $ec_k $ec_m `numfmt --from=iec-i $blocksize` $backend $total_iterations $min_iterations $max_runtime | tee -a $outfile
+    $prog                                                   \
+        --k             4                                   \
+        --m             2                                   \
+        --blocksize     `numfmt --from=iec-i $blocksize`    \
+        --backend       $backend                            \
+        --skips         1                                   \
+        --iterations    100000                              \ 
+        --min-iter      1000                                \
+        --max-runtime   60                                  \
+    | tee -a $outfile
     echo "---" | tee -a $outfile
 }
 

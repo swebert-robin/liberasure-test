@@ -29,7 +29,7 @@ int *create_skips_array(struct ec_args *args, int num_blocks_to_skip)
 
     for (int i = 0; i < num_blocks_to_skip; i++) {
         buf[(skip_idx & 0xF) % k_plus_m] = 1;
-        skip_idx >>= 0xF
+        skip_idx >>= 0xF;
     }
 
     return buf;

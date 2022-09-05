@@ -1,3 +1,4 @@
+#include "argparser.h"
 #include "data.h"
 #include "timing.h"
 
@@ -110,63 +111,37 @@ int main(int argc, char **argv)
 {
     setbuf(stdout, NULL);
 
-    if (argc != 8)
-        return 1;
+    struct cmdline_args *ca = malloc(sizeof(struct cmdline_args));
+    parse_cmdline_args(argc, argv, ca);
 
-    int ec_k = atoi(argv[1]);
-    int ec_m = atoi(argv[2]);
-    size_t block_size = strtoul(argv[3], NULL, 10);
-    const char *backend = argv[4];
-    int total_iter = atoi(argv[5]);
-    int min_iter = atoi(argv[6]);
-    double max_runtime = atof(argv[7]);
-
-    size_t data_size = block_size * ec_k;
+    size_t data_size = ca->blocksize * ca->k;
     int be_id = 1;
-    if (memcmp(backend, "ic", 2) == 0)
+    if (memcmp(ca->backend, "ic", 2) == 0)
         be_id = EC_BACKEND_ISA_L_RS_CAUCHY;
-    else if (memcmp(backend, "iv", 2) == 0)
+    else if (memcmp(ca->backend, "iv", 2) == 0)
         be_id = EC_BACKEND_ISA_L_RS_VAND;
-    else if (memcmp(backend, "jc", 2) == 0)
+    else if (memcmp(ca->backend, "jc", 2) == 0)
         be_id = EC_BACKEND_JERASURE_RS_CAUCHY;
-    else if (memcmp(backend, "jv", 2) == 0)
+    else if (memcmp(ca->backend, "jv", 2) == 0)
         be_id = EC_BACKEND_JERASURE_RS_VAND;
 
-    // printf(
-    //     "k=%ld\n"
-    //     "m=%ld\n"
-    //     "data_size=%ld\n"
-    //     "be_id=%d\n"
-    //     "total_iter=%d\n"
-    //     "min_iter=%d\n"
-    //     "max_runtime=%lf\n",
-    //     ec_k,
-    //     ec_m,
-    //     data_size,
-    //     be_id,
-    //     total_iter,
-    //     min_iter,
-    //     max_runtime
-    // );
-    // return 0;
-
     struct ec_args args = {
-        .k = ec_k,
-        .m = ec_m,
+        .k = ca->k,
+        .m = ca->m,
         // .w = 16,
-        .hd = ec_m, // for reed-solomon, hamming distance (hd) = m
+        .hd = ca->m, // for reed-solomon, hamming distance (hd) = m
         .ct = CHKSUM_NONE,
     };
 
-    printf("backend:   %s\n", backend);
-    printf("K+M:       %d+%d\n", ec_k, ec_m);
-    printf("blocksize: %lu\n", block_size);
+    printf("backend:   %s\n", ca->backend);
+    printf("K+M:       %d+%d\n", ca->k, ca->m);
+    printf("blocksize: %lu\n", ca->blocksize);
 
     int iter;
-    for (iter = 0; iter < total_iter; iter++)
+    for (iter = 0; iter < ca->total_iter; iter++)
     {
         // complete at least min_iter before checking if time limit exceeded
-        if (total_time_taken() > max_runtime && iter > min_iter)
+        if (total_time_taken() > ca->max_runtime && iter > ca->min_iter)
             break;
         iteration(be_id, data_size, &args);
         // printf("iter=%d time=%lf\n", iter, total_time_taken());
@@ -175,5 +150,6 @@ int main(int argc, char **argv)
     printf("iters:     %d\n", iter);
     print_time_taken(iter);
 
+    free(ca);
     return 0;
 }
